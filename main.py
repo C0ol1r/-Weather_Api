@@ -15,12 +15,11 @@ def fetch_weather_data(queue):
         #Запрос по api к серверу openmeteo
         weather_data = fetch_weather(LATITUDE, LONGITUDE)
         if weather_data:
-            # print("Weather data collected ")  
             #Записываем в очередь данные полученные по api и команду 
             queue.put(["INPUT",weather_data])
             time.sleep(900)  # Пауза на 15 минут
             
-# просто процесс который висит в консоли для подачи в очередь команды обы экспорте
+#Просто процесс который висит в консоли для подачи в очередь команды об экспорте
 def writer(queue):
     while True:
         export = input("Хотите экспортировать данные в файл .xlsx? (да/нет): ")
@@ -41,10 +40,10 @@ def tree_of_proces(queue):
             continue
         else:
             test = queue.get()
-            #Если это объект класса Экспорт, переводчим в функцию для экспорта в Excel
+            #Если это объект класса Экспорт, переводим в функцию для экспорта в Excel
         if test[0]=='Export':
             export_data(test[1],DB_URL)
-            #Если это объект класса INPUT, переводчим в фнкцию для дополнения базы
+            #Если это объект класса INPUT, переводим в фнкцию для дополнения базы
         elif test[0]=='INPUT':
             save_to_database(test[1],DB_URL)
         else: 

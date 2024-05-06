@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker,declarative_base
 import pandas as pd
 
 Base = declarative_base()
-#Объявляем класс данных с набором необходимых для нас полей
+#Объявляем класс данных с набором необходимых для задачи полей
 class WeatherData(Base):
     __tablename__ = 'weather_data'
 
@@ -23,17 +23,17 @@ def init_db(db_url):
     Base.metadata.create_all(engine)
     #Открываем сессию для дальнейшей работы с базой
     Session = sessionmaker(bind=engine)
-    #Возвращаем движок и сессию понадобится в других сегментах кода
+    #Возвращаем движок и сессию(Они понадобятся в других сегментах кода)
     return [Session(),engine]
 #Селектим данные из базы в количестве 10 штук с помощью инструмента pandas
 def read_weather_data(db_engine, limit=10):
     query = f"SELECT * FROM weather_data ORDER BY timestamp DESC LIMIT {limit}"
     df = pd.read_sql(query, db_engine)
     return df
-#считываем при помощи ранее написаной функции данные из базы
+#Считываем при помощи ранее написаной функции данные из базы
 def export_data(name,DB_URL):
     db_engine= init_db(DB_URL)[1]
-    #Берем движковую часть базы и с её помощью 
+    #Берём движковую часть базы и с её помощью 
     weather_data = read_weather_data(db_engine)
     export_to_excel(weather_data, name)
     #Отправляем в экспорт название файла и считанные данные 
@@ -47,4 +47,3 @@ def save_to_database(Weather,db_url):
     db_session = init_db(db_url)[0]
     db_session.add(WeatherData(**Weather))
     db_session.commit()
-    # print("Weather data added to database")
