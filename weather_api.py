@@ -2,7 +2,7 @@ import requests
 
 def fetch_weather(latitude, longitude):
     #Url полученный с сайта open meteo с предварительно заготовленными необходимыми параметрами.
-    url = f"-"
+    url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current=temperature_2m,rain,snowfall,surface_pressure,wind_speed_10m,wind_direction_10m&forecast_days=1"
     response = requests.get(url)
     #Статус 200- успешно
     if response.status_code == 200:
